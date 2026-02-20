@@ -1,0 +1,15 @@
+{
+  "name": "wandernear",
+  "version": "1.0.0",
+  "description": "A beautiful, feature-rich web application that helps users discover and book amazing local experiences while traveling. Built with HTML, CSS, JavaScript, Firebase, and Google Maps API.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^12.7.0",
+    "ogl": "^1.0.11"
+  }
+}

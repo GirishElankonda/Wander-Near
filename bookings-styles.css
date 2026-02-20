@@ -1,0 +1,217 @@
+/* ========================================================================== */
+/* BOOKINGS SECTION STYLES                                                   */
+/* ========================================================================== */
+
+/* Bookings Section */
+.bookings-section {
+    padding: var(--space-3xl) 0;
+    min-height: 60vh;
+}
+
+.bookings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+}
+
+/* Booking Card */
+.booking-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    border: 1px solid var(--border-color);
+}
+
+.booking-card:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+}
+
+.booking-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.booking-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+}
+
+.booking-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.booking-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xs) 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.booking-category {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.booking-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.booking-detail {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.booking-detail i {
+    color: var(--primary-color);
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.booking-card-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.booking-card-actions .btn-small {
+    flex: 1;
+}
+
+/* Danger Button Variant */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* Booked Button State */
+.book-btn.booked {
+    background: linear-gradient(135deg, #10b981, #059669);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.book-btn.booked:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+}
+
+/* Empty State for Bookings */
+.bookings-list .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-3xl);
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--border-color);
+}
+
+.bookings-list .empty-state i {
+    font-size: 4rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+    opacity: 0.5;
+}
+
+.bookings-list .empty-state h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.bookings-list .empty-state p {
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+    font-size: 1rem;
+}
+
+/* Responsive Bookings */
+@media (max-width: 768px) {
+    .bookings-list {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .booking-card {
+        padding: var(--space-md);
+    }
+
+    .booking-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .booking-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+
+    .booking-card-actions {
+        flex-direction: column;
+    }
+
+    .booking-card-actions .btn-small {
+        width: 100%;
+    }
+}
+
+/* Loading State for Bookings */
+.bookings-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-3xl);
+    color: var(--text-muted);
+}
+
+.bookings-loading i {
+    font-size: 2rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

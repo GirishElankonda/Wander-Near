@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="WanderNear - Your premium travel companion for discovering and booking amazing local experiences while traveling">
+    <title>WanderNear - Discover & Book Local Experiences</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bookings-styles.css">
+    <link rel="stylesheet" href="trip-planner-styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-compass brand-icon"></i>
+                <span class="brand-text">WanderNear</span>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#explore" class="nav-link">Explore</a>
+                <a href="#trip-planner" class="nav-link">Trip Planner</a>
+                <a href="#bookings" class="nav-link">My Bookings</a>
+                <a href="#favorites" class="nav-link">Favorites</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn-icon" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <div class="user-menu-container" style="position: relative;">
+                    <button class="btn-secondary" id="loginBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Sign In</span>
+                    </button>
+
+                    <!-- User Menu Dropdown -->
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <div class="user-menu-header">
+                            <div class="user-avatar-large" id="menuUserAvatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <h4 id="menuUserName">User Name</h4>
+                                <p id="menuUserEmail">user@example.com</p>
+                            </div>
+                        </div>
+                        <div class="user-menu-items">
+                            <a href="#profile" class="menu-item">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a href="#settings" class="menu-item">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                            <div class="menu-divider"></div>
+                            <button class="menu-item text-danger" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="gradient-overlay"></div>
+            <div class="animated-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Discover Amazing
+                    <span class="gradient-text">Local Experiences</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Your AI-powered travel companion for finding hidden gems,
+                    authentic restaurants, and unforgettable adventures nearby
+                </p>
+                <div class="hero-actions">
+                    <button class="btn-primary btn-large" id="getStartedBtn">
+                        <i class="fas fa-rocket"></i>
+                        <span>Get Started</span>
+                    </button>
+                    <button class="btn-outline btn-large" id="watchVideoBtn">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Watch Demo</span>
+                    </button>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Places</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">Happy Travelers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4.9★</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="app-preview" id="appPreview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-card">
+                <div class="search-header">
+                    <h2>Find Your Next Adventure</h2>
+                    <p>Search for places, experiences, and activities near you</p>
+                </div>
+
+                <div class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        <input type="text" id="locationInput" placeholder="Where are you?" class="search-input">
+                        <button class="btn-icon-small" id="useLocationBtn" aria-label="Use current location">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                    </div>
+
+                    <div class="search-filters">
+                        <button class="filter-chip active" data-category="all">
+                            <i class="fas fa-globe"></i>
+                            All
+                        </button>
+                        <button class="filter-chip" data-category="restaurant">
+                            <i class="fas fa-utensils"></i>
+                            Restaurants
+                        </button>
+                        <button class="filter-chip" data-category="tourist_attraction">
+                            <i class="fas fa-landmark"></i>
+                            Attractions
+                        </button>
+                        <button class="filter-chip" data-category="lodging">
+                            <i class="fas fa-hotel"></i>
+                            Hotels
+                        </button>
+                        <button class="filter-chip" data-category="cafe">
+                            <i class="fas fa-coffee"></i>
+                            Cafes
+                        </button>
+                        <button class="filter-chip" data-category="museum">
+                            <i class="fas fa-building-columns"></i>
+                            Museums
+                        </button>
+                    </div>
+
+                    <button class="btn-primary btn-search" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                        <span>Search Places</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Section -->
+    <section class="explore-section" id="explore">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Explore Nearby</h2>
+                    <p class="section-subtitle">Discover amazing places around you</p>
+                </div>
+                <div class="view-toggle">
+                    <button class="toggle-btn active" data-view="grid">
+                        <i class="fas fa-grip"></i>
+                    </button>
+                    <button class="toggle-btn" data-view="map">
+                        <i class="fas fa-map"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="explore-content">
+                <!-- Map View -->
+                <div class="map-container" id="mapContainer" style="display: none;">
+                    <div id="map" class="map"></div>
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="recenterBtn">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                        <button class="map-control-btn" id="filterMapBtn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="places-grid" id="placesGrid">
+                    <!-- Loading State -->
+                    <div class="loading-state" id="loadingState">
+                        <div class="spinner"></div>
+                        <p>Finding amazing places near you...</p>
+                    </div>
+
+                    <!-- Places will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header centered">
+                <h2 class="section-title">Why Choose WanderNear?</h2>
+                <p class="section-subtitle">Everything you need for the perfect travel experience</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Smart Discovery</h3>
+                    <p>AI-powered recommendations based on your preferences and location</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Easy Booking</h3>
+                    <p>Book restaurants, hotels, and experiences with just a few taps</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Save Favorites</h3>
+                    <p>Create collections of your favorite places and share with friends</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Real Reviews</h3>
+                    <p>Authentic reviews from real travelers to help you decide</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Trip Planning</h3>
+                    <p>Plan your entire journey with our intelligent itinerary builder</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Safe</h3>
+                    <p>Your data is protected with enterprise-grade security</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trip Planner Section -->
+    <section class="trip-planner-section" id="trip-planner">
+        <div class="planner-container">
+            <div class="section-header centered">
+                <h2 class="section-title">Budget-Based Auto Trip Planner</h2>
+                <p class="section-subtitle">Let AI plan your perfect trip within your budget</p>
+            </div>
+
+            <div class="planner-card">
+                <!-- Budget Input Section -->
+                <div class="budget-input-section">
+                    <h3>Your Budget</h3>
+                    <div class="budget-input-group">
+                        <div class="budget-input-wrapper">
+                            <span class="budget-currency">$</span>
+                            <input type="number" id="budgetInput" class="budget-input" placeholder="0.00" min="0"
+                                step="10">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auto Mode Toggle -->
+                <div class="auto-mode-section">
+                    <div class="auto-mode-label">
+                        <div class="auto-mode-icon">🤖</div>
+                        <div class="auto-mode-text">
+                            <h4>Auto Planning Mode</h4>
+                            <p>Let AI automatically generate your itinerary</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoModeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Duration Selector -->
+                <div class="duration-section">
+                    <h4>Plan Duration</h4>
+                    <div class="duration-buttons">
+                        <button class="duration-btn active" data-duration="1">
+                            <i class="fas fa-calendar-day"></i>
+                            1 Day
+                        </button>
+                        <button class="duration-btn" data-duration="2">
+                            <i class="fas fa-calendar-alt"></i>
+                            2 Days
+                        </button>
+                        <button class="duration-btn" data-duration="3">
+                            <i class="fas fa-calendar-week"></i>
+                            3 Days
+                        </button>
+                        <button class="duration-btn" data-duration="7">
+                            <i class="fas fa-calendar"></i>
+                            Entire Trip (7 Days)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Budget Breakdown Display -->
+                <div id="budgetBreakdown"></div>
+
+                <!-- Manual Selection Section (hidden by default) -->
+                <div id="manualSelectionSection" class="manual-selection-section" style="display: none;">
+                    <h4>Manual Selection Mode</h4>
+                    <p>Browse the Explore section below and select places to add to your itinerary</p>
+                    <button class="btn-primary"
+                        onclick="document.getElementById('explore').scrollIntoView({behavior: 'smooth'})">
+                        <i class="fas fa-search"></i>
+                        Browse Places
+                    </button>
+                </div>
+
+                <!-- Auto Generation Section (hidden by default) -->
+                <div id="autoGenerationSection" style="display: none;">
+                    <!-- Will show info about auto generation -->
+                </div>
+
+                <!-- Generate Plan Button -->
+                <div class="generate-section">
+                    <button class="btn-generate disabled" id="generatePlanBtn">
+                        <i class="fas fa-magic"></i>
+                        <span>Generate Trip Plan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Itinerary Display -->
+            <div id="itineraryContainer" class="itinerary-container">
+                <!-- Itinerary will be dynamically inserted here -->
+            </div>
+
+            <!-- Regenerate Button (hidden by default) -->
+            <button type="button" class="btn-regenerate" id="regeneratePlanBtn" style="display: none;"
+                onclick="handleRegeneratePlan()">
+                <i class="fas fa-sync-alt"></i>
+                Regenerate Plan
+            </button>
+        </div>
+    </section>
+
+    <!-- My Bookings Section -->
+    <section class="bookings-section" id="bookings" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">My Bookings</h2>
+                <p class="section-subtitle">Manage your upcoming reservations</p>
+            </div>
+
+            <div class="bookings-list" id="bookingsList">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>No Bookings Yet</h3>
+                    <p>Start exploring and book your first experience!</p>
+                    <button class="btn-primary"
+                        onclick="document.getElementById('explore').scrollIntoView({behavior: 'smooth'})">
+                        Explore Places
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section class="favorites-section" id="favorites" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">My Favorites</h2>
+                <p class="section-subtitle">Your saved places and experiences</p>
+            </div>
+
+            <div class="favorites-grid" id="favoritesGrid">
+                <div class="empty-state">
+                    <i class="fas fa-heart-broken"></i>
+                    <h3>No Favorites Yet</h3>
+                    <p>Save places you love to find them easily later!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-overlay" id="authModalOverlay"></div>
+        <div class="modal-content auth-modal">
+            <button class="modal-close" id="authModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="auth-container">
+                <div class="auth-header">
+                    <i class="fas fa-compass auth-logo"></i>
+                    <h2 id="authTitle">Welcome to WanderNear</h2>
+                    <p id="authSubtitle">Sign in to save favorites and make bookings</p>
+                </div>
+
+                <div class="auth-form" id="authForm">
+                    <div class="input-group">
+                        <label for="authEmail">Email</label>
+                        <input type="email" id="authEmail" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="authPassword">Password</label>
+                        <input type="password" id="authPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="input-group" id="nameGroup" style="display: none;">
+                        <label for="authName">Full Name</label>
+                        <input type="text" id="authName" placeholder="John Doe">
+                    </div>
+
+                    <div class="remember-me-container">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="rememberMeCheck">
+                            <span class="checkmark"></span>
+                            <span class="label-text">Remember Me</span>
+                        </label>
+                    </div>
+
+                    <button class="btn-primary btn-full" id="authSubmitBtn">
+                        <span>Sign In</span>
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+
+                    <button class="btn-social google-btn" id="googleSignInBtn">
+                        <i class="fab fa-google"></i>
+                        <span>Continue with Google</span>
+                    </button>
+
+                    <div class="auth-footer">
+                        <p id="authToggleText">
+                            Don't have an account?
+                            <a href="#" id="authToggleLink">Sign up</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Place Details Modal -->
+    <div class="modal" id="placeModal">
+        <div class="modal-overlay" id="placeModalOverlay"></div>
+        <div class="modal-content place-modal">
+            <button class="modal-close" id="placeModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="place-details" id="placeDetails">
+                <!-- Place details will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-overlay" id="bookingModalOverlay"></div>
+        <div class="modal-content booking-modal">
+            <button class="modal-close" id="bookingModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="booking-form-container" id="bookingFormContainer">
+                <!-- Booking form will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-overlay" id="videoModalOverlay"></div>
+        <div class="modal-content video-modal">
+            <button class="modal-close" id="videoModalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="video-container">
+                <iframe id="demoVideo" width="100%" height="100%"
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="WanderNear Demo"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="locationConsentModal">
+        <div class="modal-overlay" id="locationConsentOverlay"></div>
+        <div class="modal-content auth-modal">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <i class="fas fa-map-marker-alt auth-logo"></i>
+                    <h2>Enable Location Services</h2>
+                    <p>WanderNear would like to access your location to provide personalized recommendations and show
+                        nearby places.</p>
+                </div>
+
+                <div class="location-consent-benefits">
+                    <div class="benefit-item">
+                        <i class="fas fa-compass"></i>
+                        <span>Discover places near you</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-route"></i>
+                        <span>Get accurate directions</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Personalized recommendations</span>
+                    </div>
+                </div>
+
+                <div class="location-consent-actions">
+                    <button class="btn-primary btn-full" id="allowLocationBtn">
+                        <i class="fas fa-check"></i>
+                        <span>Allow Location Access</span>
+                    </button>
+                    <button class="btn-outline btn-full" id="denyLocationBtn">
+                        <i class="fas fa-times"></i>
+                        <span>Not Now</span>
+                    </button>
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 1rem;">
+                    You can change this setting anytime in your browser or profile settings.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Galaxy Background Animation -->
+    <script type="module" src="background-animation.js"></script>
+
+    <!-- Firebase Auth Module -->
+    <script type="module" src="auth.js"></script>
+
+    <!-- Bookings Module -->
+    <script type="module" src="bookings.js"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- App Scripts -->
+    <script src="geolocation.js"></script>
+    <script src="trip-planner.js"></script>
+    <script src="app.js"></script>
+    <style>
+        .remember-me-container {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            gap: 0.5rem;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            height: 18px;
+            width: 18px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-container:hover input~.checkmark {
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-container input:checked~.checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .label-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+    </style>
+</body>
+
+</html>

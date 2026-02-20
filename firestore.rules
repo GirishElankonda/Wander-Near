@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================================================
+    // USERS COLLECTION - User Profile Documents
+    // ========================================================================
+    match /users/{userId} {
+      // Users can read and write their own user document
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // ======================================================================
+      // BOOKINGS SUBCOLLECTION - User's Travel Bookings
+      // ======================================================================
+      // Path: users/{userId}/bookings/{bookingId}
+      // Each user has a private bookings subcollection
+      match /bookings/{bookingId} {
+        // Allow read if authenticated and requesting own bookings
+        allow read: if request.auth != null && request.auth.uid == userId;
+        
+        // Allow create if:
+        // 1. User is authenticated
+        // 2. User is creating their own booking (userId matches)
+        // 3. The booking document includes userId field matching the auth user
+        allow create: if request.auth != null 
+                      && request.auth.uid == userId
+                      && request.resource.data.userId == request.auth.uid;
+        
+        // Allow update if authenticated and updating own booking
+        allow update: if request.auth != null 
+                      && request.auth.uid == userId;
+        
+        // Allow delete if authenticated and deleting own booking
+        allow delete: if request.auth != null 
+                      && request.auth.uid == userId;
+      }
+    }
+    
+    // ========================================================================
+    // DENY ALL OTHER ACCESS
+    // ========================================================================
+    // Explicitly deny all other requests
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ============================================================================
+// DEPLOYMENT INSTRUCTIONS
+// ============================================================================
+// 
+// OPTION 1: Firebase Console (Recommended)
+// 1. Go to: https://console.firebase.google.com/
+// 2. Select project: travelhelper-c030c
+// 3. Navigate to: Firestore Database → Rules
+// 4. Copy and paste these rules
+// 5. Click "Publish"
+//
+// OPTION 2: Firebase CLI
+// firebase deploy --only firestore:rules
+//
+// ============================================================================
+// TESTING RULES
+// ============================================================================
+//
+// In Firestore Console → Rules → Test:
+//
+// TEST 1: User reads own bookings (SHOULD ALLOW)
+// Location: /users/abc123/bookings/booking001
+// Auth: authenticated as abc123
+// Operation: get
+// Expected: ALLOW
+//
+// TEST 2: User reads other user's bookings (SHOULD DENY)
+// Location: /users/xyz789/bookings/booking001
+// Auth: authenticated as abc123
+// Operation: get
+// Expected: DENY
+//
+// TEST 3: Unauthenticated access (SHOULD DENY)
+// Location: /users/abc123/bookings/booking001
+// Auth: unauthenticated
+// Operation: get
+// Expected: DENY
+//
+// ============================================================================
