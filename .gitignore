@@ -62,8 +62,14 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# Environment and generated config (never commit secrets)
 .env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.generated.js
 
 # dataconnect generated files
 .dataconnect
