@@ -116,7 +116,8 @@
                 })
                 .catch(error => {
                     console.log('Could not get user location:', error.message);
-                    // Map will use default center
+                    // Map will use default center, so search around default center
+                    searchNearbyPlaces(40.7128, -74.0060);
                 });
         }
     }
@@ -309,12 +310,21 @@
 
                 // Show error message
                 if (typeof showToast === 'function') {
-                    showToast('Failed to load places. Please try again.', 'error');
+                    showToast('Failed to load places from API. Showing mock data.', 'error');
                 }
 
                 // Fallback to mock places if available
                 if (typeof generateMockPlaces === 'function') {
                     generateMockPlaces();
+                } else {
+                    const mockPlaces = [
+                        { id: 1001, name: "Central Park Cafe", lat: lat + 0.005, lng: lng + 0.005, address: "123 Park Ave", category: "cafe", photo: getCategoryPhoto("cafe"), rating: 4.5, ratingCount: 120 },
+                        { id: 1002, name: "Grand Hotel", lat: lat - 0.005, lng: lng - 0.005, address: "456 Main St", category: "lodging", photo: getCategoryPhoto("lodging"), rating: 4.8, ratingCount: 340 },
+                        { id: 1003, name: "City Museum", lat: lat + 0.008, lng: lng - 0.002, address: "789 Art Blvd", category: "museum", photo: getCategoryPhoto("museum"), rating: 4.6, ratingCount: 89 },
+                        { id: 1004, name: "Downtown Diner", lat: lat - 0.002, lng: lng + 0.008, address: "321 Food St", category: "restaurant", photo: getCategoryPhoto("restaurant"), rating: 4.2, ratingCount: 210 },
+                        { id: 1005, name: "Historic Square", lat: lat + 0.001, lng: lng - 0.007, address: "1 Heritage Way", category: "tourist_attraction", photo: getCategoryPhoto("tourist_attraction"), rating: 4.7, ratingCount: 560 }
+                    ];
+                    displayPlaces(mockPlaces);
                 }
             });
     }
